@@ -1,0 +1,16 @@
+# Publish the training source, protocol settings and documentation.
+*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/RUNNING_CN.md
+!/pyproject.toml
+!/requirements*.txt
+!/configs/
+!/configs/model.json
+!/configs/patient.json
+!/source/
+!/source/**/
+!/source/**/*.py
+!/tests/
+!/tests/**/*.py

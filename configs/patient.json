@@ -1,0 +1,103 @@
+{
+  "study": {
+    "ridge_alphas": [
+      100,
+      10,
+      1
+    ],
+    "feature_PCs": 4,
+    "residual_ranks": [
+      2,
+      4,
+      8
+    ],
+    "residual_gains": [
+      0.5,
+      1.0
+    ],
+    "candidate_pool_size": 73,
+    "selection_tolerance": 0.002,
+    "dynamic_Spearman_tolerance": 0.005,
+    "RNA_seeds": [
+      20262300,
+      20362300,
+      20462300
+    ]
+  },
+  "core": {
+    "split": {
+      "outer_folds": 5,
+      "outer_assignment": "patient_salted_hash_sorted_round_robin",
+      "outer_salt": "KBS2|BeatAML|v18bDerived|longitudinal|outer|2026-08-26",
+      "inner_folds": 4,
+      "inner_assignment": "outer_training_patient_salted_hash_sorted_round_robin",
+      "inner_salt": "KBS2|BeatAML|v18bDerived|longitudinal|inner|2026-08-26",
+      "same_patient_across_roles_allowed": false,
+      "outer_late_response_used_for_model_or_ensemble_selection": false
+    },
+    "preprocessing": {
+      "expression_transform": "within_patient_inverse_normal_rank_across_all_available_genes",
+      "expression_gene_selection": "top_2000_variance_genes_in_current_training_patients_only",
+      "expression_standardization": "current_training_patients_only",
+      "expression_PCA_components": 8,
+      "source_response_imputation": "current_training_per_drug_mean",
+      "source_response_standardization": "current_training_patients_only",
+      "source_response_PCA_components": 8,
+      "all_PCA_fit_train_only": true
+    },
+    "learner": {
+      "family": "Ridge",
+      "alpha": 10.0,
+      "minimum_training_patients_per_drug": 8,
+      "feature_standardization": "per_expert_per_outer_or_inner_training_role",
+      "random_seed": 20262300,
+      "hyperparameter_search": false
+    },
+    "nested_multi_expert": {
+      "selection_metric": "inner_patient_macro_Spearman",
+      "selection_tolerance": 0.002,
+      "tie_break": "first_predeclared_candidate_within_tolerance",
+      "candidates_in_order": {
+        "Combined": {
+          "Combined": 1.0
+        },
+        "HalfPersistenceHalfCombined": {
+          "Persistence": 0.5,
+          "Combined": 0.5
+        },
+        "QuarterPersistenceQuarterSourceHalfCombined": {
+          "Persistence": 0.25,
+          "SourceState": 0.25,
+          "Combined": 0.5
+        },
+        "QuarterPersistenceQuarterRNAHalfCombined": {
+          "Persistence": 0.25,
+          "RNA": 0.25,
+          "Combined": 0.5
+        },
+        "QuarterPopulationQuarterPersistenceHalfCombined": {
+          "PopulationAnchor": 0.25,
+          "Persistence": 0.25,
+          "Combined": 0.5
+        },
+        "EqualSourceRNACombined": {
+          "SourceState": 0.3333333333333333,
+          "RNA": 0.3333333333333333,
+          "Combined": 0.3333333333333334
+        }
+      }
+    },
+    "cohort_freeze": {
+      "independent_patients": 30,
+      "paired_specimens_per_patient": 2,
+      "drugs": 85,
+      "minimum_joint_finite_drugs_per_patient": 50,
+      "time_unit": "days_from_patient_earliest_specimen",
+      "early_expression_only": true,
+      "early_response_source_state": true,
+      "late_response_target_only": true,
+      "response": "negative_fitted_AUC_larger_is_more_sensitive"
+    }
+  },
+  "additional_patient_salt": "KBS2|Fig5|2026-09-05|additional-patients"
+}

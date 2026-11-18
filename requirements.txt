@@ -1,0 +1,6 @@
+# Environment used for the current common-panel cell-screen comparison.
+numpy==1.26.4
+scipy==1.17.1
+scikit-learn==1.9.1
+joblib==1.6.0
+threadpoolctl==3.8.0
